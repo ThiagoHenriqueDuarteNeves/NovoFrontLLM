@@ -66,4 +66,5 @@ export interface AppSettings {
   contextWindow: number
   systemPrompt: string
   modelPrefixFilter: string
+  serverConfigured: boolean
 }

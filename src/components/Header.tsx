@@ -5,6 +5,7 @@
 import { useState, useEffect } from 'react'
 import { useSettings } from '../store/settings'
 import { checkConnection } from '../api/lmstudio'
+import { ServerConfig } from './ServerConfig'
 
 export function Header() {
   const { settings, updateSettings } = useSettings()
@@ -49,13 +50,36 @@ export function Header() {
           </div>
         </div>
 
-        <button
-          className="btn-settings"
-          onClick={() => setIsExpanded(!isExpanded)}
-          title="Configurações"
-        >
-          ⚙️ Configurações
-        </button>
+        <div className="header-actions">
+          <ServerConfig />
+          <button
+            className="btn-settings"
+            onClick={() => setIsExpanded(!isExpanded)}
+            title="Configurações"
+          >
+            ⚙️ Configurações
+          </button>
+          <button
+            className="btn-reset"
+            onClick={() => {
+              updateSettings({ serverConfigured: false })
+              localStorage.removeItem('lmstudio-settings')
+              window.location.reload()
+            }}
+            title="Resetar e mostrar setup inicial"
+            style={{ 
+              background: '#f59e0b', 
+              color: 'white', 
+              border: 'none', 
+              borderRadius: '6px', 
+              padding: '0.5rem', 
+              cursor: 'pointer',
+              fontSize: '0.8rem'
+            }}
+          >
+            🔄 Reset
+          </button>
+        </div>
       </div>
 
       {isExpanded && (
@@ -63,15 +87,16 @@ export function Header() {
           <div className="settings-grid">
             <div className="setting-item">
               <label>
-                Base URL
+                🌐 Base URL do Servidor
                 <input
                   type="text"
                   value={settings.baseUrl}
                   onChange={(e) => updateSettings({ baseUrl: e.target.value })}
-                  placeholder="http://192.168.1.7:1234/v1"
+                  placeholder="https://37a0702aef57.ngrok-free.app/v1"
+                  className="server-url-input"
                 />
               </label>
-              <small>URL do LM Studio (incluindo /v1)</small>
+              <small>URL do servidor da API (incluindo /v1). Ex: https://37a0702aef57.ngrok-free.app/v1</small>
             </div>
 
             <div className="setting-item">

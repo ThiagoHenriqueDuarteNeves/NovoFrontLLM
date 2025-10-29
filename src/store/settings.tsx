@@ -16,7 +16,7 @@ const STORAGE_KEY = 'lmstudio-settings'
 
 // Valores padrão das configurações
 const defaultSettings: AppSettings = {
-  baseUrl: import.meta.env.VITE_LMS_BASE_URL || 'http://192.168.1.7:1234/v1',
+  baseUrl: import.meta.env.VITE_LMS_BASE_URL || 'https://37a0702aef57.ngrok-free.app/v1',
   apiKey: import.meta.env.VITE_LMS_API_KEY || 'lm-studio',
   selectedModel: '',
   temperature: 0.7,
@@ -24,6 +24,7 @@ const defaultSettings: AppSettings = {
   contextWindow: 4096,
   systemPrompt: '',
   modelPrefixFilter: '',
+  serverConfigured: false,
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined)
