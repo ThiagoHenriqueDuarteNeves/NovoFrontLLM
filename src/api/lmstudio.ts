@@ -33,12 +33,23 @@ export async function listModels(
   apiKey: string
 ): Promise<ModelsResponse> {
   try {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    }
+
+    // Adiciona Authorization header apenas se apiKey não for vazio
+    if (apiKey && apiKey.trim()) {
+      headers.Authorization = `Bearer ${apiKey}`
+    }
+
+    // Para ngrok, adiciona header específico
+    if (baseUrl.includes('ngrok')) {
+      headers['ngrok-skip-browser-warning'] = 'true'
+    }
+
     const response = await fetch(`${baseUrl}/models`, {
       method: 'GET',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
+      headers,
     })
 
     if (!response.ok) {
@@ -78,12 +89,24 @@ export async function listModels(
 export async function checkConnection(baseUrl: string, apiKey: string): Promise<number | null> {
   try {
     const start = performance.now()
+    
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    }
+
+    // Adiciona Authorization header apenas se apiKey não for vazio
+    if (apiKey && apiKey.trim()) {
+      headers.Authorization = `Bearer ${apiKey}`
+    }
+
+    // Para ngrok, adiciona header específico
+    if (baseUrl.includes('ngrok')) {
+      headers['ngrok-skip-browser-warning'] = 'true'
+    }
+
     const response = await fetch(`${baseUrl}/models`, {
       method: 'GET',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
+      headers,
     })
     const end = performance.now()
 
@@ -111,12 +134,23 @@ export async function* chatStream(
   abortController?: AbortController
 ): AsyncGenerator<ChatCompletionChunk> {
   try {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    }
+
+    // Adiciona Authorization header apenas se apiKey não for vazio
+    if (apiKey && apiKey.trim()) {
+      headers.Authorization = `Bearer ${apiKey}`
+    }
+
+    // Para ngrok, adiciona header específico
+    if (baseUrl.includes('ngrok')) {
+      headers['ngrok-skip-browser-warning'] = 'true'
+    }
+
     const response = await fetch(`${baseUrl}/chat/completions`, {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
+      headers,
       body: JSON.stringify({
         ...request,
         stream: true, // Força streaming
