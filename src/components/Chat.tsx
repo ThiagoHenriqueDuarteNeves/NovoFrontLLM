@@ -12,6 +12,7 @@ export function Chat() {
   const { settings } = useSettings()
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [input, setInput] = useState('')
+  const [attachments, setAttachments] = useState<Array<{ name: string; dataUrl: string; type: string }>>([])
   const [isStreaming, setIsStreaming] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [usage, setUsage] = useState<{ prompt: number; completion: number } | null>(null)
@@ -19,9 +20,44 @@ export function Chat() {
   const abortControllerRef = useRef<AbortController | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const chatContainerRef = useRef<HTMLDivElement>(null)
   const [autoScroll, setAutoScroll] = useState(true)
   const autoScrollTimeoutRef = useRef<number | null>(null)
+
+  // Helper para converter File para data URL
+  const fileToDataUrl = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = () => resolve(reader.result as string)
+      reader.onerror = reject
+      reader.readAsDataURL(file)
+    })
+  }
+
+  // Handler para paste de imagens
+  useEffect(() => {
+    const handlePaste = async (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items
+      if (!items) return
+
+      for (const item of Array.from(items)) {
+        if (item.type.startsWith('image/')) {
+          const file = item.getAsFile()
+          if (file) {
+            const dataUrl = await fileToDataUrl(file)
+            setAttachments((prev) => [
+              ...prev,
+              { name: file.name || 'pasted-image.png', dataUrl, type: file.type },
+            ])
+          }
+        }
+      }
+    }
+
+    document.addEventListener('paste', handlePaste)
+    return () => document.removeEventListener('paste', handlePaste)
+  }, [])
 
   // Auto-scroll inteligente: para quando usuário scrolla manualmente
   useEffect(() => {
@@ -83,15 +119,25 @@ export function Chat() {
       return
     }
 
+    // Monta conteúdo com imagens anexadas (se houver)
+    let content = input.trim()
+    if (attachments.length > 0) {
+      const imageMarkdown = attachments
+        .map((att) => `![${att.name}](${att.dataUrl})`)
+        .join('\n')
+      content = `${imageMarkdown}\n\n${content}`
+    }
+
     const userMessage: ChatMessage = {
       role: 'user',
-      content: input.trim(),
+      content,
     }
 
     // Adiciona mensagem do usuário
     const newMessages = [...messages, userMessage]
     setMessages(newMessages)
     setInput('')
+    setAttachments([])
     setError(null)
     setIsStreaming(true)
 
@@ -205,6 +251,26 @@ export function Chat() {
       handleSend()
     }
   }
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files) return
+
+    for (const file of Array.from(files)) {
+      if (file.type.startsWith('image/') || file.type === 'application/pdf') {
+        const dataUrl = await fileToDataUrl(file)
+        setAttachments((prev) => [...prev, { name: file.name, dataUrl, type: file.type }])
+      }
+    }
+
+    // Limpa input para permitir selecionar o mesmo arquivo novamente
+    e.target.value = ''
+  }
+
+  const removeAttachment = (index: number) => {
+    setAttachments((prev) => prev.filter((_, i) => i !== index))
+  }
+
   return (
     <main className="chat-container">
       <div className="chat-messages" ref={chatContainerRef}>
@@ -265,6 +331,53 @@ export function Chat() {
         </div>
 
         <div className="chat-input-wrapper">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*,application/pdf"
+            multiple
+            onChange={handleFileSelect}
+            style={{ display: 'none' }}
+          />
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isStreaming}
+            className="btn-secondary"
+            style={{ marginRight: '8px' }}
+          >
+            📎
+          </button>
+          {attachments.length > 0 && (
+            <div style={{ display: 'flex', gap: '4px', marginBottom: '8px', flexWrap: 'wrap' }}>
+              {attachments.map((att, idx) => (
+                <span
+                  key={idx}
+                  style={{
+                    fontSize: '12px',
+                    background: '#e0e0e0',
+                    padding: '4px 8px',
+                    borderRadius: '4px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                  }}
+                >
+                  {att.name}
+                  <button
+                    onClick={() => removeAttachment(idx)}
+                    style={{
+                      border: 'none',
+                      background: 'transparent',
+                      cursor: 'pointer',
+                      padding: '0 2px',
+                    }}
+                  >
+                    ✕
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
           <textarea
             ref={textareaRef}
             value={input}
