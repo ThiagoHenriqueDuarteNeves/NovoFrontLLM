@@ -671,6 +671,11 @@
   justify-content: center;
 }
 
+.chat-actions button {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8rem;
+}
+
 .chat-input-wrapper {
   display: flex;
   gap: 0.5rem;
