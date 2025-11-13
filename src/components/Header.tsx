@@ -7,7 +7,11 @@ import { useSettings } from '../store/settings'
 import { checkConnection } from '../api/lmstudio'
 import { ServerConfig } from './ServerConfig'
 
-export function Header() {
+interface HeaderProps {
+  onMenuClick?: () => void
+}
+
+export function Header({ onMenuClick }: HeaderProps) {
   const { settings, updateSettings } = useSettings()
   const [isExpanded, setIsExpanded] = useState(false)
   const [latency, setLatency] = useState<number | null>(null)
@@ -38,6 +42,16 @@ export function Header() {
     <header className="app-header">
       <div className="header-content">
         <div className="header-left">
+          {onMenuClick && (
+            <button
+              className="btn-menu-toggle"
+              onClick={onMenuClick}
+              title="Menu de Modelos"
+              aria-label="Abrir menu de modelos"
+            >
+              ☰
+            </button>
+          )}
           <h1>🤖 LM Studio Client</h1>
           <div className="connection-status">
             {isChecking ? (

@@ -7,7 +7,12 @@ import { useSettings } from '../store/settings'
 import { listModels, LMStudioAPIError } from '../api/lmstudio'
 import type { Model } from '../types'
 
-export function ModelSelect() {
+interface ModelSelectProps {
+  isOpen?: boolean
+  onClose?: () => void
+}
+
+export function ModelSelect({ isOpen = false, onClose }: ModelSelectProps) {
   const { settings, updateSettings } = useSettings()
   const [models, setModels] = useState<Model[]>([])
   const [loading, setLoading] = useState(false)
@@ -86,11 +91,29 @@ export function ModelSelect() {
     return matchesSearch && matchesPrefix
   })
 
+  const handleModelSelect = (modelId: string) => {
+    updateSettings({ selectedModel: modelId })
+    // Fecha a sidebar em mobile após selecionar
+    if (onClose) {
+      onClose()
+    }
+  }
+
   return (
-    <aside className="model-sidebar">
+    <aside className={`model-sidebar ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-header">
         <h2>Modelos</h2>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="btn-icon btn-close-sidebar"
+              title="Fechar menu"
+              aria-label="Fechar menu de modelos"
+            >
+              ✕
+            </button>
+          )}
           <button
             onClick={async () => {
               console.log('🔍 Teste manual da API...')
@@ -165,7 +188,7 @@ export function ModelSelect() {
             <button
               key={model.id}
               className={`model-item ${settings.selectedModel === model.id ? 'selected' : ''}`}
-              onClick={() => updateSettings({ selectedModel: model.id })}
+              onClick={() => handleModelSelect(model.id)}
             >
               <div className="model-id">{model.id}</div>
               {model.owned_by && <div className="model-owner">by {model.owned_by}</div>}
