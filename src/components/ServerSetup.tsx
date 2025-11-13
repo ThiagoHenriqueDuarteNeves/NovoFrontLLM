@@ -22,9 +22,9 @@ export function ServerSetup() {
 
   const suggestedServers = [
     {
-      name: 'Ngrok Tunnel',
-      url: 'https://37a0702aef57.ngrok-free.app',
-      description: 'Servidor via Ngrok (recomendado)',
+      name: 'Ngrok Tunnel (exemplo)',
+      url: 'https://example.ngrok.app',
+      description: 'Exemplo: Servidor via Ngrok (não pré-configurado)',
       icon: '🌐'
     },
     {
@@ -111,9 +111,11 @@ export function ServerSetup() {
   }
 
   const handleSkip = () => {
-    // Usa a URL padrão se o usuário pular
+    // Usa a URL padrão local do LM Studio (localhost) se o usuário pular.
+    // Também permite sobrescrever via VITE_LMS_BASE_URL em ambientes onde aplicável.
+    const defaultLocal = import.meta.env.VITE_LMS_BASE_URL || 'http://localhost:1234/v1'
     updateSettings({ 
-      baseUrl: 'https://37a0702aef57.ngrok-free.app/v1',
+      baseUrl: defaultLocal,
       serverConfigured: true 
     })
   }

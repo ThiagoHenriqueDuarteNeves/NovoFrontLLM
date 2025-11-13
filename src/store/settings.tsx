@@ -16,7 +16,8 @@ const STORAGE_KEY = 'lmstudio-settings'
 
 // Valores padrão das configurações
 const defaultSettings: AppSettings = {
-  baseUrl: import.meta.env.VITE_LMS_BASE_URL || 'https://37a0702aef57.ngrok-free.app/v1',
+  // Não pré-preencher com um túnel público por segurança; deixar em branco como placeholder
+  baseUrl: import.meta.env.VITE_LMS_BASE_URL || '',
   apiKey: import.meta.env.VITE_LMS_API_KEY || 'lm-studio',
   selectedModel: '',
   temperature: 0.7,
