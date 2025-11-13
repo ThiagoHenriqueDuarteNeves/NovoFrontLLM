@@ -1,5 +1,6 @@
 /**
  * App principal - Layout e estrutura da aplicação
+ * Sidebar de modelos oculta por padrão
  */
 
 import { useState } from 'react'
