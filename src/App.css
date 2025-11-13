@@ -1017,7 +1017,28 @@ button:disabled {
 }
 
 /* ========== RESPONSIVE ========== */
+
+/* Tablets e Mobile Grande (max-width: 768px) */
 @media (max-width: 768px) {
+  /* Header mais compacto */
+  .app-header {
+    padding: 0.75rem;
+  }
+
+  .header-left h1 {
+    font-size: 1.25rem;
+  }
+
+  .connection-status {
+    font-size: 0.75rem;
+  }
+
+  .btn-settings {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  /* Sidebar escondida por padrão em mobile */
   .model-sidebar {
     position: absolute;
     left: 0;
@@ -1032,6 +1053,60 @@ button:disabled {
     transform: translateX(0);
   }
 
+  /* Chat messages com padding reduzido */
+  .chat-messages {
+    padding: 0.75rem;
+  }
+
+  .message {
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .message-avatar {
+    font-size: 1.5rem;
+    width: 32px;
+    height: 32px;
+  }
+
+  .message-body {
+    padding: 0.75rem;
+  }
+
+  /* Chat footer otimizado */
+  .chat-footer {
+    padding: 0.75rem;
+  }
+
+  .chat-input-wrapper textarea {
+    font-size: 0.85rem;
+    padding: 0.6rem;
+    min-height: 60px;
+  }
+
+  .btn-send {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .chat-actions {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .chat-actions button {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.75rem;
+  }
+
+  /* Scroll notice ajustado */
+  .scroll-notice {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.75rem;
+    top: 0.5rem;
+  }
+
+  /* Settings grid */
   .settings-grid {
     grid-template-columns: 1fr;
   }
@@ -1046,6 +1121,248 @@ button:disabled {
   .btn-server-config {
     margin-left: 0;
     margin-top: 0.5rem;
+  }
+
+  /* Code blocks */
+  .code-block pre {
+    padding: 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .btn-copy-code {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+  }
+}
+
+/* Smartphones (max-width: 480px) */
+@media (max-width: 480px) {
+  /* Header extra compacto */
+  .app-header {
+    padding: 0.5rem;
+  }
+
+  .header-left {
+    gap: 0.5rem;
+  }
+
+  .header-left h1 {
+    font-size: 1.1rem;
+  }
+
+  .header-actions {
+    gap: 0.25rem;
+  }
+
+  .btn-settings {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+  }
+
+  /* Messages ainda mais compactas */
+  .chat-messages {
+    padding: 0.5rem;
+  }
+
+  .message {
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .message-avatar {
+    font-size: 1.25rem;
+    width: 28px;
+    height: 28px;
+  }
+
+  .message-body {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .message-role {
+    font-size: 0.8rem;
+  }
+
+  /* Chat input compacto */
+  .chat-footer {
+    padding: 0.5rem;
+  }
+
+  .chat-input-wrapper {
+    gap: 0.35rem;
+  }
+
+  .chat-input-wrapper textarea {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+    min-height: 50px;
+    max-height: 120px;
+  }
+
+  .btn-send {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  .chat-hint {
+    font-size: 0.7rem;
+  }
+
+  .chat-stats {
+    font-size: 0.75rem;
+    padding: 0.4rem;
+  }
+
+  /* Sidebar otimizada */
+  .model-sidebar {
+    width: 85vw;
+    max-width: 300px;
+  }
+
+  .sidebar-header {
+    padding: 0.75rem;
+  }
+
+  .sidebar-header h2 {
+    font-size: 1rem;
+  }
+
+  .search-box {
+    padding: 0.5rem;
+  }
+
+  .search-box input {
+    padding: 0.4rem;
+    font-size: 0.8rem;
+  }
+
+  .model-item {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .model-id {
+    font-size: 0.8rem;
+  }
+
+  .model-owner {
+    font-size: 0.7rem;
+  }
+
+  /* Scroll notice menor */
+  .scroll-notice {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.6rem;
+  }
+
+  /* Botões de ação menores */
+  .chat-actions button {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.6rem;
+  }
+
+  /* Code blocks */
+  .code-header {
+    padding: 0.4rem 0.75rem;
+  }
+
+  .code-lang {
+    font-size: 0.7rem;
+  }
+
+  .code-block pre {
+    padding: 0.6rem;
+    font-size: 0.75rem;
+  }
+
+  /* Tables responsivas */
+  .message-body table {
+    font-size: 0.8rem;
+  }
+
+  .message-body th,
+  .message-body td {
+    padding: 0.35rem;
+  }
+}
+
+/* Smartphones Pequenos (max-width: 375px) */
+@media (max-width: 375px) {
+  /* Header mínimo */
+  .app-header {
+    padding: 0.4rem;
+  }
+
+  .header-left h1 {
+    font-size: 1rem;
+  }
+
+  .connection-status {
+    display: none; /* Esconde status em telas muito pequenas */
+  }
+
+  .btn-settings {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  /* Messages ultra compactas */
+  .message-avatar {
+    font-size: 1.1rem;
+    width: 24px;
+    height: 24px;
+  }
+
+  .message-body {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  /* Input mínimo funcional */
+  .chat-input-wrapper textarea {
+    font-size: 0.75rem;
+    padding: 0.4rem;
+    min-height: 45px;
+  }
+
+  .btn-send {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.75rem;
+  }
+
+  /* Botões empilhados se necessário */
+  .chat-actions {
+    gap: 0.3rem;
+  }
+
+  .chat-actions button {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.5rem;
+    flex: 1;
+    min-width: fit-content;
+  }
+
+  /* Sidebar 90% da tela */
+  .model-sidebar {
+    width: 90vw;
+  }
+
+  .model-item {
+    padding: 0.5rem;
+  }
+
+  /* Scroll notice muito pequeno */
+  .scroll-notice {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.5rem;
+  }
+
+  /* Code blocks mínimos */
+  .code-block pre {
+    font-size: 0.7rem;
+    padding: 0.5rem;
   }
 }
 
@@ -1360,6 +1677,18 @@ button:disabled {
     padding: 1.5rem 1rem 1rem 1rem;
   }
 
+  .setup-icon {
+    font-size: 2.5rem;
+  }
+
+  .setup-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .setup-header p {
+    font-size: 0.9rem;
+  }
+
   .setup-content {
     padding: 1.5rem 1rem;
   }
@@ -1367,6 +1696,7 @@ button:disabled {
   .setup-actions {
     flex-direction: column;
     padding: 1rem;
+    gap: 0.75rem;
   }
 
   .btn-connect,
@@ -1386,5 +1716,175 @@ button:disabled {
   .suggestion-icon {
     font-size: 1.25rem;
     margin-right: 0.75rem;
+  }
+
+  .suggestion-name {
+    font-size: 0.9rem;
+  }
+
+  .suggestion-url {
+    font-size: 0.8rem;
+  }
+
+  .suggestion-desc {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .server-setup-modal {
+    margin: 0.5rem;
+    max-height: 95vh;
+  }
+
+  .setup-header {
+    padding: 1rem 0.75rem 0.75rem 0.75rem;
+  }
+
+  .setup-icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .setup-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .setup-header p {
+    font-size: 0.85rem;
+  }
+
+  .setup-content {
+    padding: 1rem 0.75rem;
+  }
+
+  .section-label {
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .suggestion-btn {
+    padding: 0.6rem;
+  }
+
+  .suggestion-icon {
+    font-size: 1.1rem;
+    margin-right: 0.6rem;
+    min-width: 1.5rem;
+  }
+
+  .suggestion-name {
+    font-size: 0.85rem;
+  }
+
+  .suggestion-url {
+    font-size: 0.75rem;
+  }
+
+  .suggestion-desc {
+    font-size: 0.7rem;
+  }
+
+  .server-url-input {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .connection-feedback {
+    padding: 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .setup-actions {
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .btn-connect,
+  .btn-skip {
+    padding: 0.6rem 1.25rem;
+    font-size: 0.85rem;
+  }
+
+  .setup-footer small {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .server-setup-modal {
+    margin: 0.25rem;
+    border-radius: 8px;
+  }
+
+  .setup-header {
+    padding: 0.75rem 0.5rem 0.5rem 0.5rem;
+  }
+
+  .setup-icon {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .setup-header h1 {
+    font-size: 1.1rem;
+  }
+
+  .setup-header p {
+    font-size: 0.8rem;
+  }
+
+  .setup-content {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .section-label {
+    font-size: 0.8rem;
+  }
+
+  .suggestions-grid {
+    gap: 0.4rem;
+  }
+
+  .suggestion-btn {
+    padding: 0.5rem;
+  }
+
+  .suggestion-icon {
+    font-size: 1rem;
+    margin-right: 0.5rem;
+  }
+
+  .suggestion-name {
+    font-size: 0.8rem;
+  }
+
+  .suggestion-url {
+    font-size: 0.7rem;
+    word-break: break-all;
+  }
+
+  .suggestion-desc {
+    font-size: 0.65rem;
+  }
+
+  .server-url-input {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .connection-feedback {
+    padding: 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .setup-actions {
+    padding: 0.5rem;
+  }
+
+  .btn-connect,
+  .btn-skip {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
   }
 }
