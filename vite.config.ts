@@ -8,4 +8,14 @@ export default defineConfig({
     port: 5173,
     host: true, // Permite acesso via rede local
   },
+  build: {
+    // Cache busting com hash nos arquivos
+    rollupOptions: {
+      output: {
+        entryFileNames: `assets/[name].[hash].js`,
+        chunkFileNames: `assets/[name].[hash].js`,
+        assetFileNames: `assets/[name].[hash].[ext]`
+      }
+    }
+  }
 })
