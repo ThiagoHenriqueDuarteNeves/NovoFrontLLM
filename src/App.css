@@ -2,7 +2,8 @@
 .app {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100vh; /* Fallback para navegadores antigos */
+  height: 100dvh; /* Dynamic viewport height - se ajusta com barra de endereço mobile */
   overflow: hidden;
 }
 
@@ -10,6 +11,8 @@
   display: flex;
   flex: 1;
   overflow: hidden;
+  /* Garante que o conteúdo não seja cortado pela barra de endereço */
+  min-height: 0;
 }
 
 /* ========== HEADER ========== */
@@ -1020,9 +1023,19 @@ button:disabled {
 
 /* Tablets e Mobile Grande (max-width: 768px) */
 @media (max-width: 768px) {
-  /* Header mais compacto */
+  /* Fix para barra de endereço mobile */
+  .app {
+    /* Usa a altura real disponível, não a altura total do viewport */
+    min-height: -webkit-fill-available;
+  }
+
+  /* Header fixado no topo, não afetado pela barra de endereço */
   .app-header {
     padding: 0.75rem;
+    /* Garante que o header fique no topo visível */
+    position: sticky;
+    top: 0;
+    z-index: 50;
   }
 
   .header-left h1 {
@@ -1036,6 +1049,14 @@ button:disabled {
   .btn-settings {
     padding: 0.4rem 0.75rem;
     font-size: 0.8rem;
+  }
+
+  /* App body com altura calculada corretamente */
+  .app-body {
+    /* Garante que ocupe o espaço restante sem overflow */
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
   }
 
   /* Sidebar escondida por padrão em mobile */
@@ -1053,9 +1074,21 @@ button:disabled {
     transform: translateX(0);
   }
 
+  /* Chat container com altura correta */
+  .chat-container {
+    /* Garante que o chat ocupe todo espaço disponível */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
   /* Chat messages com padding reduzido */
   .chat-messages {
     padding: 0.75rem;
+    /* Permite scroll sem cortar conteúdo */
+    flex: 1 1 auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* Scroll suave em iOS */
   }
 
   .message {

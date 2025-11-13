@@ -58,11 +58,27 @@ body {
   -webkit-text-size-adjust: 100%;
   /* Melhora responsividade de toque */
   touch-action: manipulation;
+  /* Fix para barra de endereço mobile - iOS Safari */
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+}
+
+html {
+  /* Previne zoom indesejado em iOS quando focando inputs */
+  height: -webkit-fill-available;
 }
 
 #app {
   width: 100vw;
-  height: 100vh;
+  width: 100dvw; /* Dynamic viewport width */
+  height: 100vh; /* Fallback */
+  height: 100dvh; /* Dynamic viewport height - se ajusta com barra de endereço mobile */
+  /* Previne scroll indesejado em mobile */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 /* Utility classes */
