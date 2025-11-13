@@ -145,6 +145,8 @@
   background: var(--bg-tertiary);
   border-radius: 6px;
   border: 1px solid var(--border-color);
+  max-height: 70vh;
+  overflow-y: auto;
 }
 
 .settings-grid {
