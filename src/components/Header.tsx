@@ -5,7 +5,6 @@
 import { useState, useEffect } from 'react'
 import { useSettings } from '../store/settings'
 import { checkConnection } from '../api/lmstudio'
-import { ServerConfig } from './ServerConfig'
 
 interface HeaderProps {
   onMenuClick?: () => void
@@ -65,7 +64,6 @@ export function Header({ onMenuClick }: HeaderProps) {
         </div>
 
         <div className="header-actions">
-          <ServerConfig />
           <button
             className="btn-settings"
             onClick={() => setIsExpanded(!isExpanded)}
