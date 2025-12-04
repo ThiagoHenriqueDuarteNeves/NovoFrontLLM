@@ -25,14 +25,39 @@ export class LMStudioAPIError extends Error {
 }
 
 /**
+ * Detecta se a URL é um webhook (contém /webhook/ no caminho)
+ */
+function isWebhookUrl(url: string): boolean {
+  return url.includes('/webhook/')
+}
+
+/**
  * Lista todos os modelos disponíveis no LM Studio
  * GET {baseUrl}/models
+ * 
+ * Se for um webhook, retorna um modelo padrão pois webhooks não têm endpoint /models
  */
 export async function listModels(
   baseUrl: string,
   apiKey: string
 ): Promise<ModelsResponse> {
   try {
+    // Se for um webhook, retorna um modelo padrão
+    if (isWebhookUrl(baseUrl)) {
+      console.log('🔗 Webhook detectado, usando modelo padrão')
+      return {
+        object: 'list',
+        data: [
+          {
+            id: 'webhook-model',
+            object: 'model',
+            created: Date.now(),
+            owned_by: 'webhook',
+          }
+        ]
+      }
+    }
+
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
     }
@@ -83,7 +108,7 @@ export async function listModels(
 }
 
 /**
- * Verifica conectividade com o LM Studio
+ * Verifica conectividade com o LM Studio ou Webhook
  * Retorna latência em ms ou null se falhar
  */
 export async function checkConnection(baseUrl: string, apiKey: string): Promise<number | null> {
@@ -102,6 +127,20 @@ export async function checkConnection(baseUrl: string, apiKey: string): Promise<
     // Para ngrok, adiciona header específico
     if (baseUrl.includes('ngrok')) {
       headers['ngrok-skip-browser-warning'] = 'true'
+    }
+
+    // Para webhooks, testa fazendo uma requisição simples OPTIONS ou HEAD
+    if (isWebhookUrl(baseUrl)) {
+      const response = await fetch(baseUrl, {
+        method: 'HEAD',
+        headers,
+      })
+      const end = performance.now()
+      // Webhooks geralmente retornam 405 (Method Not Allowed) para HEAD, o que é ok
+      if (response.ok || response.status === 405) {
+        return Math.round(end - start)
+      }
+      return null
     }
 
     const response = await fetch(`${baseUrl}/models`, {
@@ -148,7 +187,10 @@ export async function* chatStream(
       headers['ngrok-skip-browser-warning'] = 'true'
     }
 
-    const response = await fetch(`${baseUrl}/chat/completions`, {
+    // Para webhooks, usa a URL diretamente. Para APIs OpenAI, adiciona /chat/completions
+    const chatUrl = isWebhookUrl(baseUrl) ? baseUrl : `${baseUrl}/chat/completions`
+
+    const response = await fetch(chatUrl, {
       method: 'POST',
       headers,
       body: JSON.stringify({

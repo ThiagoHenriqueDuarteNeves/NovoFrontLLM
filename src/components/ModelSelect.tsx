@@ -27,29 +27,10 @@ export function ModelSelect() {
     setError(null)
 
     try {
-      // Primeiro teste a conexão
-      console.log('🌐 Testando conexão...')
-      const connectionTest = await fetch(`${settings.baseUrl}/v1/models`, {
-        method: 'GET',
-        headers: {
-          'ngrok-skip-browser-warning': 'true',
-          'Content-Type': 'application/json',
-          ...(settings.apiKey && { 'Authorization': `Bearer ${settings.apiKey}` })
-        }
-      })
-      
-      console.log('📡 Status da resposta:', connectionTest.status)
-      console.log('📋 Headers da resposta:', Object.fromEntries(connectionTest.headers.entries()))
-      
-      if (!connectionTest.ok) {
-        throw new Error(`Erro HTTP ${connectionTest.status}: ${connectionTest.statusText}`)
-      }
-      
-      const testData = await connectionTest.json()
-      console.log('🎯 Dados brutos da API:', testData)
+      console.log('🌐 Carregando modelos...')
       
       const response = await listModels(settings.baseUrl, settings.apiKey)
-      console.log('✅ Modelos carregados via função:', response.data)
+      console.log('✅ Modelos carregados:', response.data)
       setModels(response.data)
 
       // Se não há modelo selecionado, seleciona o primeiro
@@ -59,6 +40,8 @@ export function ModelSelect() {
 
       if (response.data.length === 0) {
         setError('⚠️ Nenhum modelo disponível no servidor. Verifique se há modelos carregados no LM Studio.')
+      } else if (response.data[0]?.id === 'webhook-model') {
+        console.log('🔗 Webhook detectado - usando modelo padrão')
       }
     } catch (err) {
       console.error('❌ Erro ao carregar modelos:', err)
