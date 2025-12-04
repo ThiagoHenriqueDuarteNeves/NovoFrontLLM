@@ -47,6 +47,8 @@ export function ServerSetup() {
     // Remove trailing slash
     let cleanUrl = url.trim().replace(/\/$/, '')
     
+    // TESTE: Desabilitado temporariamente - para reverter, descomente as linhas abaixo
+    /*
     // Se já termina com /v1, retorna como está
     if (cleanUrl.endsWith('/v1')) {
       return cleanUrl
@@ -54,6 +56,10 @@ export function ServerSetup() {
     
     // Adiciona /v1 garantindo que há uma barra
     return `${cleanUrl}/v1`
+    */
+    
+    // Retorna URL sem adicionar /v1 (TESTE)
+    return cleanUrl
   }
 
   const handleTestAndConnect = async () => {
