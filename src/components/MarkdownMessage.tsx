@@ -20,11 +20,11 @@ export function MarkdownMessage({ content, role }: MarkdownMessageProps) {
 
   // Detecta se há tag <think> (completa ou incompleta)
   const hasThinking = /<think>/i.test(content)
-  
+
   // Extrai todo o conteúdo dentro de <think>...</think> ou <think>...(até o fim se incompleto)
   let thinkingContent = ''
   let visibleContent = content
-  
+
   if (hasThinking) {
     // Tenta pegar o conteúdo entre <think> e </think>
     const completeMatch = content.match(/<think>([\s\S]*?)<\/think>/i)
@@ -55,24 +55,19 @@ export function MarkdownMessage({ content, role }: MarkdownMessageProps) {
       setCopyFeedback('✅')
       setTimeout(() => setCopyFeedback(null), 1500)
     } catch (err) {
-      console.error('Falha ao copiar:', err)
       setCopyFeedback('❌')
     }
   }
 
   const handleCopyCode = async (text: string, index?: number) => {
-    console.log('📋 Tentando copiar código:', { text, index, length: text.length })
-    
     try {
       // Verifica se clipboard API está disponível
       if (!navigator.clipboard) {
-        console.error('❌ Clipboard API não disponível')
         throw new Error('Clipboard API não disponível')
       }
-      
+
       await navigator.clipboard.writeText(text)
-      console.log('✅ Código copiado com sucesso!')
-      
+
       if (typeof index === 'number') {
         setCopiedCodeIndex(index)
         setTimeout(() => setCopiedCodeIndex(null), 2000)
@@ -81,9 +76,7 @@ export function MarkdownMessage({ content, role }: MarkdownMessageProps) {
         setTimeout(() => setCopyFeedback(null), 1500)
       }
     } catch (err) {
-      console.error('❌ Falha ao copiar código:', err)
-      console.error('Tipo do erro:', typeof err, err)
-      
+
       if (typeof index === 'number') {
         setCopiedCodeIndex(-1) // -1 indica erro
         setTimeout(() => setCopiedCodeIndex(null), 2000)
@@ -145,7 +138,7 @@ export function MarkdownMessage({ content, role }: MarkdownMessageProps) {
               code({ inline, className, children, ...props }: any) {
                 const match = /language-(\w+)/.exec(className || '')
                 const lang = match ? match[1] : ''
-                
+
                 // Extrai o texto do código de forma mais robusta
                 let codeText = ''
                 if (typeof children === 'string') {
@@ -155,14 +148,12 @@ export function MarkdownMessage({ content, role }: MarkdownMessageProps) {
                 } else {
                   codeText = String(children)
                 }
-                
+
                 // Remove quebra de linha final se existir
                 codeText = codeText.replace(/\n$/, '')
-                
+
                 // Gera um índice único baseado no conteúdo
                 const codeIndex = codeText.length + codeText.charCodeAt(0)
-                
-                console.log('🔍 Código detectado:', { lang, length: codeText.length, preview: codeText.substring(0, 50) })
 
                 return !inline ? (
                   <div className="code-block">
@@ -172,14 +163,13 @@ export function MarkdownMessage({ content, role }: MarkdownMessageProps) {
                         className={`btn-copy-code ${copiedCodeIndex === codeIndex ? 'copied' : ''}`}
                         onClick={(e) => {
                           e.preventDefault()
-                          console.log('🖱️ Botão clicado! Copiando:', codeText.substring(0, 50))
                           handleCopyCode(codeText, codeIndex)
                         }}
                         title="Copiar código"
                       >
-                        {copiedCodeIndex === codeIndex ? '✅ Copiado!' : 
-                         copiedCodeIndex === -1 ? '❌ Erro' : 
-                         '📋 Copiar'}
+                        {copiedCodeIndex === codeIndex ? '✅ Copiado!' :
+                          copiedCodeIndex === -1 ? '❌ Erro' :
+                            '📋 Copiar'}
                       </button>
                     </div>
                     <pre>

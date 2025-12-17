@@ -46,12 +46,12 @@ export function ServerSetup() {
 
     // Remove trailing slash
     let cleanUrl = url.trim().replace(/\/$/, '')
-    
+
     // Se já termina com /v1, retorna como está
     if (cleanUrl.endsWith('/v1')) {
       return cleanUrl
     }
-    
+
     // Adiciona /v1 garantindo que há uma barra
     return `${cleanUrl}/v1`
   }
@@ -74,7 +74,7 @@ export function ServerSetup() {
     try {
       const formattedUrl = formatUrl(serverUrl.trim())
       const latency = await checkConnection(formattedUrl, settings.apiKey)
-      
+
       if (latency !== null) {
         setConnectionStatus({
           status: 'success',
@@ -84,9 +84,9 @@ export function ServerSetup() {
 
         // Salva a configuração e continua
         setTimeout(() => {
-          updateSettings({ 
+          updateSettings({
             baseUrl: formattedUrl,
-            serverConfigured: true 
+            serverConfigured: true
           })
         }, 1500)
       } else {
@@ -114,9 +114,9 @@ export function ServerSetup() {
     // Usa a URL padrão local do LM Studio (localhost) se o usuário pular.
     // Também permite sobrescrever via VITE_LMS_BASE_URL em ambientes onde aplicável.
     const defaultLocal = import.meta.env.VITE_LMS_BASE_URL || 'http://localhost:1234/v1'
-    updateSettings({ 
+    updateSettings({
       baseUrl: defaultLocal,
-      serverConfigured: true 
+      serverConfigured: true
     })
   }
 
@@ -168,7 +168,7 @@ export function ServerSetup() {
                 placeholder="https://seu-servidor.com"
                 className="server-url-input"
                 disabled={isLoading}
-                onKeyPress={(e) => {
+                onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     handleTestAndConnect()
                   }

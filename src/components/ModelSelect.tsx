@@ -25,16 +25,12 @@ export function ModelSelect({ isOpen = false, onClose }: ModelSelectProps) {
       return
     }
 
-    console.log('🔄 Carregando modelos de:', settings.baseUrl)
-    console.log('🔑 API Key:', settings.apiKey ? 'Configurada' : 'Não configurada')
-    console.log('⚙️ Servidor configurado:', settings.serverConfigured)
     setLoading(true)
     setError(null)
 
     try {
       // Primeiro teste a conexão
-      console.log('🌐 Testando conexão...')
-      const connectionTest = await fetch(`${settings.baseUrl}/v1/models`, {
+      const connectionTest = await fetch(`${settings.baseUrl}/models`, {
         method: 'GET',
         headers: {
           'ngrok-skip-browser-warning': 'true',
@@ -42,19 +38,15 @@ export function ModelSelect({ isOpen = false, onClose }: ModelSelectProps) {
           ...(settings.apiKey && { 'Authorization': `Bearer ${settings.apiKey}` })
         }
       })
-      
-      console.log('📡 Status da resposta:', connectionTest.status)
-      console.log('📋 Headers da resposta:', Object.fromEntries(connectionTest.headers.entries()))
-      
+
       if (!connectionTest.ok) {
         throw new Error(`Erro HTTP ${connectionTest.status}: ${connectionTest.statusText}`)
       }
-      
-      const testData = await connectionTest.json()
-      console.log('🎯 Dados brutos da API:', testData)
-      
+
+      // Consume response to avoid memory leak
+      await connectionTest.json()
+
       const response = await listModels(settings.baseUrl, settings.apiKey)
-      console.log('✅ Modelos carregados via função:', response.data)
       setModels(response.data)
 
       // Se não há modelo selecionado, seleciona o primeiro
@@ -66,7 +58,6 @@ export function ModelSelect({ isOpen = false, onClose }: ModelSelectProps) {
         setError('⚠️ Nenhum modelo disponível no servidor. Verifique se há modelos carregados no LM Studio.')
       }
     } catch (err) {
-      console.error('❌ Erro ao carregar modelos:', err)
       if (err instanceof LMStudioAPIError) {
         setError(`❌ ${err.message}`)
       } else {
@@ -114,32 +105,7 @@ export function ModelSelect({ isOpen = false, onClose }: ModelSelectProps) {
               ✕
             </button>
           )}
-          <button
-            onClick={async () => {
-              console.log('🔍 Teste manual da API...')
-              try {
-                const response = await fetch(`${settings.baseUrl}/models`, {
-                  method: 'GET',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'ngrok-skip-browser-warning': 'true'
-                  },
-                })
-                const data = await response.json()
-                console.log('📋 Resposta da API:', data)
-                alert(`Modelos encontrados: ${data.data?.length || 0}`)
-              } catch (err) {
-                console.error('❌ Erro no teste:', err)
-                alert(`Erro: ${err}`)
-              }
-            }}
-            disabled={loading}
-            className="btn-icon"
-            title="Teste manual"
-            style={{ fontSize: '0.8rem' }}
-          >
-            🧪
-          </button>
+
           <button
             onClick={loadModels}
             disabled={loading}
@@ -164,8 +130,7 @@ export function ModelSelect({ isOpen = false, onClose }: ModelSelectProps) {
         <div className="error-message">
           {error}
           <div style={{ marginTop: '0.5rem', fontSize: '0.75rem', opacity: 0.8 }}>
-            📍 URL: {settings.baseUrl}<br/>
-            🔑 API Key: {settings.apiKey || '(vazio)'}
+            📍 URL: {settings.baseUrl}
           </div>
         </div>
       )}
@@ -199,22 +164,8 @@ export function ModelSelect({ isOpen = false, onClose }: ModelSelectProps) {
 
       <div className="sidebar-footer">
         <small>
-          {filteredModels.length} modelo{filteredModels.length !== 1 ? 's' : ''}
+          {filteredModels.length} modelo{filteredModels.length !== 1 ? 's' : ''} de {models.length}
         </small>
-        <div style={{ 
-          marginTop: '0.5rem', 
-          padding: '0.5rem', 
-          background: 'rgba(0,0,0,0.1)', 
-          borderRadius: '4px',
-          fontSize: '0.7rem',
-          fontFamily: 'monospace'
-        }}>
-          <div>🔗 URL: {settings.baseUrl}</div>
-          <div>🔑 Key: {settings.apiKey}</div>
-          <div>📊 Total: {models.length} modelos</div>
-          <div>🎯 Filtrados: {filteredModels.length}</div>
-          <div>✅ Configurado: {settings.serverConfigured ? 'Sim' : 'Não'}</div>
-        </div>
       </div>
     </aside>
   )

@@ -144,10 +144,10 @@ export function Chat() {
         }
 
         // Captura usage se disponível (geralmente no último chunk)
-        if ((chunk as any).usage) {
+        if (chunk.usage) {
           setUsage({
-            prompt: (chunk as any).usage.prompt_tokens,
-            completion: (chunk as any).usage.completion_tokens,
+            prompt: chunk.usage.prompt_tokens,
+            completion: chunk.usage.completion_tokens,
           })
         }
       }
