@@ -46,6 +46,8 @@ export async function listModels(
     if (baseUrl.includes('ngrok')) {
       headers['ngrok-skip-browser-warning'] = 'true'
     }
+    // Para zrok
+    headers['skip_zrok_interstitial'] = 'true'
 
     const response = await fetch(`${baseUrl}/models`, {
       method: 'GET',
@@ -89,7 +91,7 @@ export async function listModels(
 export async function checkConnection(baseUrl: string, apiKey: string): Promise<number | null> {
   try {
     const start = performance.now()
-    
+
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
     }
@@ -103,6 +105,8 @@ export async function checkConnection(baseUrl: string, apiKey: string): Promise<
     if (baseUrl.includes('ngrok')) {
       headers['ngrok-skip-browser-warning'] = 'true'
     }
+    // Para zrok
+    headers['skip_zrok_interstitial'] = 'true'
 
     const response = await fetch(`${baseUrl}/models`, {
       method: 'GET',
@@ -147,6 +151,8 @@ export async function* chatStream(
     if (baseUrl.includes('ngrok')) {
       headers['ngrok-skip-browser-warning'] = 'true'
     }
+    // Para zrok
+    headers['skip_zrok_interstitial'] = 'true'
 
     const response = await fetch(`${baseUrl}/chat/completions`, {
       method: 'POST',

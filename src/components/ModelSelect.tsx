@@ -38,21 +38,22 @@ export function ModelSelect({ isOpen = false, onClose }: ModelSelectProps) {
         method: 'GET',
         headers: {
           'ngrok-skip-browser-warning': 'true',
+          'skip_zrok_interstitial': 'true',
           'Content-Type': 'application/json',
           ...(settings.apiKey && { 'Authorization': `Bearer ${settings.apiKey}` })
         }
       })
-      
+
       console.log('📡 Status da resposta:', connectionTest.status)
       console.log('📋 Headers da resposta:', Object.fromEntries(connectionTest.headers.entries()))
-      
+
       if (!connectionTest.ok) {
         throw new Error(`Erro HTTP ${connectionTest.status}: ${connectionTest.statusText}`)
       }
-      
+
       const testData = await connectionTest.json()
       console.log('🎯 Dados brutos da API:', testData)
-      
+
       const response = await listModels(settings.baseUrl, settings.apiKey)
       console.log('✅ Modelos carregados via função:', response.data)
       setModels(response.data)
@@ -122,7 +123,8 @@ export function ModelSelect({ isOpen = false, onClose }: ModelSelectProps) {
                   method: 'GET',
                   headers: {
                     'Content-Type': 'application/json',
-                    'ngrok-skip-browser-warning': 'true'
+                    'ngrok-skip-browser-warning': 'true',
+                    'skip_zrok_interstitial': 'true'
                   },
                 })
                 const data = await response.json()
@@ -164,7 +166,7 @@ export function ModelSelect({ isOpen = false, onClose }: ModelSelectProps) {
         <div className="error-message">
           {error}
           <div style={{ marginTop: '0.5rem', fontSize: '0.75rem', opacity: 0.8 }}>
-            📍 URL: {settings.baseUrl}<br/>
+            📍 URL: {settings.baseUrl}<br />
             🔑 API Key: {settings.apiKey || '(vazio)'}
           </div>
         </div>
@@ -201,10 +203,10 @@ export function ModelSelect({ isOpen = false, onClose }: ModelSelectProps) {
         <small>
           {filteredModels.length} modelo{filteredModels.length !== 1 ? 's' : ''}
         </small>
-        <div style={{ 
-          marginTop: '0.5rem', 
-          padding: '0.5rem', 
-          background: 'rgba(0,0,0,0.1)', 
+        <div style={{
+          marginTop: '0.5rem',
+          padding: '0.5rem',
+          background: 'rgba(0,0,0,0.1)',
           borderRadius: '4px',
           fontSize: '0.7rem',
           fontFamily: 'monospace'
